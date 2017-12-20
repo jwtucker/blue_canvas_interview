@@ -1,4 +1,4 @@
-# blue_canvas_interview
+# blue_canvas_interview (XML project)
 
 Algorithm
 =====
