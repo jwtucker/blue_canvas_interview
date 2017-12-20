@@ -28,6 +28,7 @@ class XMLComparison():
         return xml_dict
 
     def compare_xml_dictionaries(self):
+        # Wraps the actual comparison function so it can call itself recursively then call the reverse
         self._compare_dictionaries(self.left, self.right)
         self._compare_dictionaries(self.right, self.left, checking_reverse=True)
         [print(i) for i in self._difference_log]
@@ -36,6 +37,7 @@ class XMLComparison():
         for key, values in left.items():
             if key in right:
                 for i, value in enumerate(values):
+                    # Checks if there's more children
                     if type(value) == dict:
                         self.stack.append(key)
                         self._compare_dictionaries(left[key][i], right[key][i], checking_reverse=checking_reverse)
@@ -43,6 +45,7 @@ class XMLComparison():
                         if checking_reverse is False:
                             self._difference_log.append('Mismatch on key: {}, values: {} vs {} with ancestors: {}'.format(key, str(left[key]), str(right[key]), str(self.stack)))
                         break
+            # If key doesn't exist on right, we log it
             else:
                 self._difference_log.append('Private key exists on ' + ('right' if checking_reverse else 'left') + 'but not left:' + key)
         try:
